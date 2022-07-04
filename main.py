@@ -4,25 +4,11 @@ import random
 
 import pygame
 
-from pygame.locals import *
+from pygame.locals import*
 
 from sys import exit
  
-pygame.init()
 
-largura = 640
-altura = 480
-
-tela = pygame.display.set_mode((largura, altura))
-
-while True:
-  for event in pygame.event.get():
-    if event.type == QUIT:
-      pygame.quit()
-      exit()
-  pygame.draw.rect(tela, (255,60,10),(200,90,10,21))
-  pygame.display.update()
-  
 
 
 
@@ -32,50 +18,99 @@ print("  BEM VINDO(A) AO JOGO DA TRILHA AMAZÔNICA!  ")
 
 nome = input("  PLAYER1, INSIRA SEU NOME:   ")
 
-cadastrado1= input("   DESEJA BUSCAR UM CADASTRO FEITO ANTERIORMENTE? [s/n]  ")
+cadastrado1= input("  DESEJA BUSCAR UM CADASTRO FEITO ANTERIORMENTE? [s/n]  ")
+con = sqlite3.connect('dados_cadastro.db')
+
+cursor = con.cursor()
 if cadastrado1 == "s":
-   cursor.execute(f"SELECT nome FROM NOME")
-   for row in cursor.fetchall():
-    print("  ",row)
-    list(row) 
-print("  \n PLAYER1, CADASTRE-SE PARA JOGAR:   ")
+   cursor.execute(f"SELECT nome FROM PLAYERS")
+   data = cursor.fetchall()
+   print(data)
+    
+   if nome in data:
+      print("HÁ CADASTRO CORRESPONDENTE")
+   else:
+     print("  NÃO HÁ CADASTRO CORRESPONDENTE, SERÁ PRECISO FAZER UM CADASTRO PARA JOGAR. ")
+     idade = int(input("  IDADE:  "))
 
-nome = input("  NOME:   ")
+     while idade < 6:
 
-idade = int(input("  IDADE:  "))
+      print("  VOCÊ NÃO POSSUI IDADE SUFICIENTE PARA JOGAR!  ")
 
-while idade < 6:
+      idade = int(input("  IDADE:  "))
 
-   print("  VOCÊ NÃO POSSUI IDADE SUFICIENTE PARA JOGAR!  ")
+     else:
 
-   idade = int(input("  IDADE:  "))
+      print(f"{nome}, seja bem vindo(a)!")
 
+ 
+
+     email = input("  EMAIL:   ")
+
+     while email.find("@") == -1:
+
+       print("  INSIRA UM EMAIL VÁLIDO! ")
+
+       email = input("  EMAIL:   ")
+
+     else:
+
+       print("  EMAIL VÁLIDO!  ")
+  
+  
+
+ 
+      
+      
+    
+    
 else:
+ print(f"  \n {nome}, CADASTRE-SE PARA JOGAR:   ")
+
+
+ idade = int(input("  IDADE:  "))
+
+ while idade < 6:
+
+    print("  VOCÊ NÃO POSSUI IDADE SUFICIENTE PARA JOGAR!  ")
+
+    idade = int(input("  IDADE:  "))
+
+ else:
 
   print(f"{nome}, seja bem vindo(a)!")
 
  
 
-email = input("  EMAIL:   ")
+ email = input("  EMAIL:   ")
 
-while email.find("@") == -1:
+ while email.find("@") == -1:
 
-  print("  INSIRA UM EMAIL VÁLIDO! ")
+   print("  INSIRA UM EMAIL VÁLIDO! ")
 
-  email = input("  EMAIL:   ")
+   email = input("  EMAIL:   ")
 
-else:
+ else:
 
-  print("  EMAIL VÁLIDO!  ")
+   print("  EMAIL VÁLIDO!  ")
 
 
  
 
 #CADASTRO DO PLAYER2
+nome2 = input("\n PLAYER2, INSIRA O SEU NOME:  ")
+cadastrado2= input("  DESEJA BUSCAR UM CADASTRO FEITO ANTERIORMENTE? [s/n]  ")
+if cadastrado2 == "s":
+   cursor.execute(f"SELECT nome FROM PLAYERS")
+   data = cursor.fetchall()
+   print(data)
+    
+   if nome in data:
+      print("HÁ CADASTRO CORRESPONDENTE")
+   else:
+     print("NÃO HÁ CADASTRO CORRESPONDENTE")
+print(f"  \n {nome2}, CADASTRE-SE PARA JOGAR:   ")
 
-print("  \n PLAYER2, CADASTRE-SE PARA JOGAR:   ")
-
-nome2 = input("  NOME:   ")
 
 idade2 = int(input("  IDADE:  "))
 
@@ -126,7 +161,22 @@ if tutorial == "s":
  
 
 start = input("  PRESSIONE ENTER PARA INICIAR O JOGO  ")
+pygame.init()
 
+largura = 640
+altura = 480
+
+tela = pygame.display.set_mode((largura, altura))
+
+while True:
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      pygame.quit()
+      exit()
+  pygame.draw.rect(tela, (255,60,10),(200,90,10,21))
+
+ 
+  
 
 dado1 = random.choice(dado)
 dado2 = random.choice(dado)
@@ -148,7 +198,9 @@ dado16 = random.choice(dado)
 
 
 print("\n-----------------RODADA 1-----------------")
+
 d = input(f"{nome}, DIGITE 'd' PARA JOGAR OS DADOS ")
+pygame.display.update()
 if d == "d":
         print(f"\n    OS VALORES DOS DADOS FORAM {dado1} E {dado2}!  " )
         c11 = dado1 + dado2
